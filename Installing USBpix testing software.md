@@ -124,12 +124,19 @@ sudo modprobe tnt4882
 # для контроллера NI GPIB-USB-HS
 sudo modprobe ni_usb_gpib
 
-# Подключение и настройка GPIB контроллера
-sudo /usr/local/sbin/gpib_config --minor 0
-
 # Настройка переменных окружения для USBpix
 source <USBpix_path>/setup.sh
 # где <USBpix_path> - путь до корневой директории USBpix
+```
+
+При изменении конфигурации подключаемых к компьютеру GPIB устройств, необходимо внести эти изменения в файл настроек ```/etc/gpib.conf```, а затем применить их командой:
+
+```
+sudo gpib_config --minor 0
+
+# или
+sudo /usr/local/sbin/gpib_config --minor 0
+# путь до исполняемого файла может отличаться
 ```
 
 ----------------------------------------
