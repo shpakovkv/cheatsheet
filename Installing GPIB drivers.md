@@ -142,9 +142,15 @@ https://linux-gpib.sourceforge.io/doc_html/supported-hardware.html#HARDWARE-MATR
 Здесь есть информация об отличиях чипов TNT4882 и TNT5004 с точки зрения драйверов:
 https://forums.ni.com/t5/Instrument-Control-GPIB-Serial/Differences-between-TNT4882-and-TNT5004-for-an-OS-driver-writer/td-p/1060813
 
+##### Необходимо изменить свойства интерфейса:
+
+```
+sudo chmod a+rw /dev/gpib0
+```
+
 ##### Запуск настройки драйвера
 
-При этом происходит считывание параметров из файла gpib.conf:
+Подключаем GPIB-USB контроллер или PCIe-GPIB плату, если это еще не сделали. Запускаем настройку драйверов, при этом происходит считывание параметров из файла gpib.conf:
 
 ```
 sudo /usr/local/sbin/gpib_config --minor 0
@@ -152,12 +158,6 @@ sudo /usr/local/sbin/gpib_config --minor 0
 ```
 
 эту команду необходимо выполнять после каждого редактирования файла gpib.conf
-
-##### Необходимо изменить свойства интерфейса:
-
-```
-sudo chmod a+rw /dev/gpib0
-```
 
 Проверка работоспособности драйвера:
 ------------------------------------
