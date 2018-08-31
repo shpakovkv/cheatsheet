@@ -129,6 +129,11 @@ sudo gpib_config --minor 0
 sudo /usr/local/sbin/gpib_config --minor 0
 # путь до исполняемого файла может отличаться
 
+# Если ROOT не запускается без переменных окружения:
+source <path_to_ROOT_build_dir>/bin/thisroot.sh
+# где <path_to_ROOT_build_dir> - директория со скомпилированными
+# файлами фреймворка ROOT (откуда запускали установку)
+
 # Настройка переменных окружения для USBpix
 source <USBpix_path>/setup.sh
 # где <USBpix_path> - путь до корневой директории USBpix
