@@ -119,24 +119,19 @@ source setup.sh
 # Если не настроена автозагрузка модуля (драйвера) контроллера GPIB:
 # для контроллера NI PCIe-GPIB:
 sudo modprobe tnt4882
-
 # или
-# для контроллера NI GPIB-USB-HS
 sudo modprobe ni_usb_gpib
+# для контроллера NI GPIB-USB-HS
+
+# Загрузка настроек GPIB драйвера
+sudo gpib_config --minor 0
+# или
+sudo /usr/local/sbin/gpib_config --minor 0
+# путь до исполняемого файла может отличаться
 
 # Настройка переменных окружения для USBpix
 source <USBpix_path>/setup.sh
 # где <USBpix_path> - путь до корневой директории USBpix
-```
-
-При изменении конфигурации подключаемых к компьютеру GPIB устройств, необходимо внести эти изменения в файл настроек ```/etc/gpib.conf```, а затем применить их командой:
-
-```
-sudo gpib_config --minor 0
-
-# или
-sudo /usr/local/sbin/gpib_config --minor 0
-# путь до исполняемого файла может отличаться
 ```
 
 ----------------------------------------
