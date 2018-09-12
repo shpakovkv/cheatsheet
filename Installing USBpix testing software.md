@@ -21,6 +21,34 @@
     sudo apt-get install qt5-default
     ```
 
+* **Qwt 6.1.2** необходим для компиляции приложений SiUSBman и USBPixTest для тестирования и прошивки Multi-IO-Board.
+
+  Скачать требуемую версию можно тут: https://sourceforge.net/projects/qwt/files/qwt/
+
+  Создаем папку для установки Qwt и распаковываем туда скачанный архив.
+
+  Необходимо создать Make-файл (скрипт для компилирования исходников) через qmake 5 версии. В большинстве дистрибутивов linux по умолчанию используется qmake 3.0. Проверить, какая версия используется по умолчанию можно командой ```qmake -v```
+
+   Находим qmake 5:
+
+  ```
+  locate -i qt5 | grep "qmake$"
+  # или
+  locate -i qt-5 | grep "qmake$"
+
+  # пример вывода:
+  /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
+  /usr/share/doc/qt5-qmake
+  ```
+
+  Переходим в папку с разарфивированнами исходниками qwt, создаем make-файл, затем запускаем компилирование, а после - установку:
+
+  ```
+  /usr/lib/x86_64-linux-gnu/qt5/bin/qmake -r qwt.pro
+  make -j4
+  sudo make install
+  ```
+
 * **libusb-1.0** - для доступа к USB-устройствам. Установка:
 
   ```
@@ -55,10 +83,12 @@
   ```
   export "ROOTSYS=<root_install_dir>"
   export "QT5DIR=<qt5_msvc_dir>"
+  export "QWTDIR=<qwt_dir>"
 
   # где
   # <root_install_dir> - путь до фреймворка ROOT
   # <qt5_msvc_dir> - путь до msvc компонентов фреймворка Qt5
+  # <qwt_dir> - путь до скомпилированных файлов qwt.
   ```
 
   Пример:
@@ -66,7 +96,10 @@
   ```
   export "ROOTSYS=/usr/bin"
   export "QT5DIR=/usr/lib64/qt5/mkspecs/win32-msvc"
+  export "QWTDIR=/home/user1/Downloads/qwt-6.1.2"
   ```
+
+  Установка qwt и создание переменной окружения QWTDIR не обязательно для STcontrol, но необходимо для программ SiUSBman и USBPixTest.
 
 ##### Запускаем настройку сборки
 
