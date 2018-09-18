@@ -53,17 +53,27 @@
 
   ```
   # для CentOS 7
-  yum install libusb
+  yum install libusbx libusbx-devel
   # как узнать установленную версию:
   rpm -qa | grep -i libusb
 
   # для Ubuntu
-  sudo apt-get install libusb-1.0-0-dev
+  sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev
   # как узнать установленную версию:
   dpkg -l libusb-1.0*
   # или
   apt-cache policy libusb-1.0*
   ```
+  Настройка прав доступа к USB-устройствам (CentOS 7):
+  
+  ```sh
+  # Скопировать файл 
+  <USBpix_path>/driver/linux/53-usbpix_f20.rules 
+  # в папку 
+  /etc/udev/rules.d
+  # где <USBpix_path> - путь до корневой директории USBpix
+  ```
+  После этого пользователям группы "users" будут доступны USB-устройства, перечисленные в файле 53-usbpix_f20.rules (там собраны все возможные варианты VendorID:DeviceID для плат MIO, MMC, GPAC всех возможных версий).
 
 * **GPIB драйвера** (linux-gpib).
 
