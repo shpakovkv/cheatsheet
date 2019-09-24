@@ -1,7 +1,11 @@
 Commissioning of the experimental setup
 =======================================
 
-For Travelling Modules.
+For RD53a Travelling Modules.
+- For more details visit [RD53A Testing twiki page](https://twiki.cern.ch/twiki/bin/viewauth/RD53/RD53ATesting).
+- The current [Travelling Module schedule can be found here](https://docs.google.com/spreadsheets/d/1uaxTqf-mSaBd6_UuOKpe0N2RLMPN3AFnNkIQ4CnIEUY/edit?usp=sharing).
+- See also [Travelling Module participation table](https://docs.google.com/spreadsheets/d/1qtbo60B43QQgahlq0hG3hi0f7tpFaO4p044CMa54tGE/edit#gid=0).
+- [x] Please subscribe to the [rd53-a-testing e-group](https://e-groups.cern.ch/e-groups/EgroupsSubscription.do?egroupName=rd53-a-testing) mailing list.
 
 Xilinx software and drivers installation
 ---------------------------------
@@ -52,8 +56,10 @@ Flashing the FPGA firmware
 
 Results uploading
 -----------------
-[PixelModulesInITkPD TWiki page.](https://twiki.cern.ch/twiki/bin/viewauth/Atlas/PixelModulesInITkPD)
-- [ ] Data of the travelling chips and modules should be stored in a common database. For the moment it is a CERNbox ([description](https://travelling-module.readthedocs.io/en/latest/datastorage/)). In order to read and write data to the corresponding CERNbox folder: sing in your [CERN account](https://account.cern.ch/account/) go to E‑Groups membership and subscribe to these two groups (it takes some time to get approval):
+[Pixel Modules in the ITk Production Database (twiki documentation).](https://twiki.cern.ch/twiki/bin/viewauth/Atlas/PixelModulesInITkPD)
+- [ ] Data of the travelling chips and modules should be stored in a common database. For the moment it is a CERNbox ([description](https://travelling-module.readthedocs.io/en/latest/datastorage/)). In order to read and write data to the corresponding CERNbox folder: sing in your [CERN account](https://account.cern.ch/account/) go to E‑Groups membership and subscribe to these e-groups (it takes some time to get approval):
  * cernbox-project-atlas-itk-pixel-module-readers
  * cernbox-project-atlas-itk-pixel-module-writers
+ * atlas-itk-pixel-module
 - [ ] To read and write data to the Production Database [register and read the short tutorial.](https://gitlab.cern.ch/jpearkes/itkpd_tutorial/blob/master/README.md)
+- [ ] Upon receipt of the Travel Pack and after departure fill out the [ContactDetails table](https://twiki.cern.ch/twiki/bin/view/Atlas/ContactDetails).
