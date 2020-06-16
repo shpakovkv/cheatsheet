@@ -37,6 +37,14 @@ STM32 ST-LINK Utility
 В ST-LINK Utility можно посмотреть версию прошивки программатора. Стоит обновить китайскую прошивку на последнюю официальную.
 
 
+Open source version of the STMicroelectronics STlink Tools
+----------------------------------------------------------
+
+https://github.com/stlink-org/stlink
+
+Есть возможность узнать Serial number программатора.
+
+
 Openocd
 =======
 
@@ -58,13 +66,13 @@ Openocd
 - texinfo
 
 Посмотреть версию установленной программы (в примере automake) можно командой:
-```
+```sh
 apt-cache show automake | grep Version
 
 ```
 
 Полезные команды на тему:
-```
+```sh
 # расположение исполняемого файла 
 which [prog_name]
 
@@ -74,7 +82,7 @@ whatis [prog_name]
 
 ##### Установка
 Из корневой папки репозитория выполнить:
-```
+```sh
 ./bootstrap 
 ./configure [options]
 make
@@ -108,7 +116,7 @@ hla_serial "\xaa\xbc\x6e\x06\x50\x75\xff\x55\x17\x42\x19\x3f"
 ```
 
 Доступные варианты интерфейсов, протоколов и т.д. можно получить добавив к соответствующей команде опцию list
-```
+```sh
 openocd -c "transport list"
 ```
 
@@ -117,12 +125,12 @@ openocd -c "transport list"
 ##### Запуск openocd сервера
 
 Простейшая команда:
-```
-openocd -f /usr/local/share/openocd/scripts/interface/stlink-v2-clone.cfg -c "transport select hla_swd" -f /usr/local/share/openocd/scripts/target/stm32f1x.cfg
+```sh
+openocd -f /usr/local/share/openocd/scripts/interface/stlink-v2.cfg -c "transport select hla_swd" -f /usr/local/share/openocd/scripts/target/stm32f1x.cfg
 ```
 
 Мой вариант:
-```
+```sh
 openocd -f /home/konstantin/STM32/stlink-v2-clone.cfg -f /usr/local/share/openocd/scripts/target/stm32f1x.cfg
 
 # в клон стлинк-конфига дописано transport select hla_swd
@@ -130,12 +138,12 @@ openocd -f /home/konstantin/STM32/stlink-v2-clone.cfg -f /usr/local/share/openoc
 
 ##### Подключение к openocd серверу
 
-```
+```sh
 telnet localhost 4444
 ```
 
 Основные команды для сохранения текущей прошивки и заливки новой:
-```
+```sh
 # перезагрузка и остановка работы МК (необходимо для манипуляций с прошивкой)
 > reset init
 # или (в мануале рекомендуется именно init)
@@ -159,7 +167,7 @@ telnet localhost 4444
 ```
 
 Еще команды:
-```
+```sh
 # в некоторых МК несколько областей флеш памяти
 # чтобы посмотреть список доступных областей флэша
 > flash list
@@ -185,42 +193,182 @@ telnet localhost 4444
 ##### Разовая прошивка с помошью openocd
 
 OpenOCD команда запуска сервера из platformio (разовая прошивка):
-```
+```sh
 openocd -d2 -s C:\Users\Konstantin\.platformio\packages\tool-openocd/scripts -f interface/stlink.cfg -c "transport select hla_swd" -f target/stm32f1x.cfg -c "reset_config none" -c "program {.pio\build\genericSTM32F103C8\firmware.elf} verify reset; shutdown;"
 
-где
-OpenOCD ==  запуск сервера отладки со следующими параметрами
--d2  	==  подробность вывода дебаг-информации уровень 2
--s C:\Users\Konstantin\.platformio\packages\tool-openocd/scripts  ==  указываем путь до папки с конфигами
--f interface/stlink.cfg  		==  конфиг интерфейса
--c "transport select hla_swd"  	==  выбор типа подключения
--f target/stm32f1x.cfg  		==  конфиг микроконтроллера
--c "reset_config none"  		==  установка режима вывода лапки reset программатора (none, значит не используется)
--c "program {.pio\build\genericSTM32F103C8\firmware.elf} verify reset;  	==  загрузка прошивки, проверка, перезапуск МК (софтверный)
-shutdown;"  	==  прекращение работы сервера 
+# где
+# OpenOCD ==  запуск сервера отладки со следующими параметрами
+# -d2  	==  подробность вывода дебаг-информации уровень 2
+# -s C:\Users\Konstantin\.platformio\packages\tool-openocd/scripts  ==  указываем путь до папки с конфигами
+# -f interface/stlink.cfg  		==  конфиг интерфейса
+# -c "transport select hla_swd"  	==  выбор типа подключения
+# -f target/stm32f1x.cfg  		==  конфиг микроконтроллера
+# -c "reset_config none"  		==  установка режима вывода лапки reset программатора (none, значит не используется)
+# -c "program {.pio\build\genericSTM32F103C8\firmware.elf} verify reset;  	==  загрузка прошивки, проверка, перезапуск МК (софтверный)
+# shutdown;"  	==  прекращение работы сервера 
 ```
 
 Команда-скрипт [program](http://openocd.org/doc/html/Flash-Programming.html "Flash-Programming") упрощает разовую загрузку прошивки:
-```
+```sh
 program filename [preverify] [verify] [reset] [exit] [offset]
 
-где
-filename  - путь до файла с прошивкой (bin, hex, elf)
-preverify (опционально) - проверка на совпадение прошивок (не прошивает если уже та же прошивка залита)
-verify (опционально) - проверка прошивки после загрузки
-reset (опционально) - неперезапуск МК после прошивки (софрверный??)
-exit (опционально) - прекращение работы openocd сервера после прошивки
-offset (опционально) - отступ от начала памяти МК (обычно 0x08000000)
+# где
+# filename  - путь до файла с прошивкой (bin, hex, elf)
+# preverify (опционально) - проверка на совпадение прошивок (не прошивает если уже та же прошивка залита)
+# verify (опционально) - проверка прошивки после загрузки
+# reset (опционально) - неперезапуск МК после прошивки (софрверный??)
+# exit (опционально) - прекращение работы openocd сервера после прошивки
+# offset (опционально) - отступ от начала памяти МК (обычно 0x08000000)
 ```
 
 Исходя из этого можно записать простую команду для разовой прошивки:
-```
+```sh
 openocd -d2 -f /usr/local/share/openocd/scripts/interface/stlink-v2.cfg -c "transport select hla_swd" -f /usr/local/share/openocd/scripts/target/stm32f1x.cfg -c "reset_config none" -c "program {path/to/firmware.elf} verify reset exit"
 ```
 
 ##### Прошивка МК с несконфигурированными выводами SWD
 
 Если ноги SWD интерфейса сконфигурированы под другие нужды, то зажать reset на МК и держать до ввода команды reset init (или reset halt), отпустить сразу перед нажатием на enter или одновременно.
+
+#### Прошивка с помощью ESP-Prog (на чипе FTDI FT2232H) через JTAG разъем
+
+[Инструкция](https://www.allaboutcircuits.com/technical-articles/getting-started-with-openocd-using-ft2232h-adapter-for-swd-debugging/).
+
+Конфиг интерфейса ESP-Prog можно получить, установив [тулы ESP-IDF для дебага ESP](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html). Нужный файл можно найти командой:
+```sh
+# по умолчанию все файлы ESP-IDF устанавливаются в ~/.espressif
+# нам нужет файл с именем вида esp32_devkitj_v1.cfg
+find ~/.espressif/ -iname "*esp32_devkitj*"
+# пример:
+# ~/.espressif/tools/openocd-esp32/v0.10.0-esp32-20200420/openocd-esp32/share/openocd/scripts/interface/ftdi/esp32_devkitj_v1.cfg
+```
+
+Чтобы использовать SWD для отладки через JTAG разъем нужно добавить в конфиг команду "transport select swd":
+```sh
+# #
+# # Driver for the FT2232H JTAG chip on the Espressif DevkitJ board
+# # (and most other FT2232H and FT232H based boards)
+# #
+ 
+
+adapter driver ftdi
+ftdi_vid_pid 0x0403 0x6010 0x0403 0x6014
+
+# interface 1 is the uart
+ftdi_channel 0
+
+transport select swd
+
+# TCK, TDI, TDO, TMS: ADBUS0-3
+# LEDs: ACBUS4-7
+
+ftdi_layout_init 0x0008 0xf00b
+ftdi_layout_signal LED -data 0x1000
+ftdi_layout_signal LED2 -data 0x2000
+ftdi_layout_signal LED3 -data 0x4000
+ftdi_layout_signal LED4 -data 0x8000
+
+ftdi_layout_signal SWD_EN -data 0
+
+# ESP32 series chips do not have a TRST input, and the SRST line is connected
+# to the EN pin. 
+# The target code doesn't handle SRST reset properly yet, so this is
+# commented out:
+# ftdi_layout_signal nSRST -oe 0x0020
+
+reset_config none
+
+# The speed of the JTAG interface, in KHz. If you get DSR/DIR errors (and they
+# do not relate to OpenOCD trying to read from a memory range without physical
+# memory being present there), you can try lowering this.
+#
+# On DevKit-J, this can go as high as 20MHz if CPU frequency is 80MHz, or 26MHz
+# if CPU frequency is 160MHz or 240MHz.
+
+# speed in kHz
+adapter speed 20000
+
+
+```
+
+Чтобы получить доступ к устройству без sudo прав нужно установить соответствующие udev rules, например от PlatformIO [инструкция здесь](https://docs.platformio.org/en/latest/faq.html#faq-udev-rules), сам файл [здесь](https://raw.githubusercontent.com/platformio/platformio-core/master/scripts/99-platformio-udev.rules).
+
+##### Подключение SWD через разъем JTAG
+
+**Не забываем переключить джаймпер питания в положение 3.3 В**
+```
+---------------------
+|TMS TCK TDO TDI ???|
+|Vcc Gnd Gnd Gnd Gnd|
+--------     --------
+
+ESP-Prog            STM32
+Vcc --------------- Vcc
+GND --------------- GND
+TCK --------------- SWDCLK
+TDO --------------- SWDIO
+TDI --- 470 Ohm --- SWDIO
+
+```
+Подключать TDI - SWDIO нужно через резистор 220-470 Ом.
+
+#### Eclipse OpenOCD plug-in
+
+[Официальная страничка и настройки](https://gnu-mcu-eclipse.github.io/debug/openocd/). Внимание! На страничке есть ссылки на старые (запрещенные к использованию) версии некоторых пакетов.
+
+Prerequisites:
+* snap
+* [Node.js version >= 8.0](https://github.com/nodesource/distributions/blob/master/README.md#snapinstall)
+* [xpm (xPack package manager)(https://www.npmjs.com/package/xpm)
+* [The xPack OpenOCD](https://github.com/xpack-dev-tools/openocd-xpack)https://xpack.github.io/openocd/install/
+
+Есть [старая версия xPack OpenOCD](https://github.com/xpack-dev-tools/openocd), которая [запрещена](https://gnu-mcu-eclipse.github.io/openocd/install/) к использованию. Не путать проекты!!
+
+
+Prerequisites simple installation:
+```sh
+# Node.js install
+
+# channel - number of major version of Node.js
+sudo snap install node --classic --channel=10
+
+
+# xpm install
+
+# by default xpm installation folder is /usr/local/bin/xpm
+# set environment for xpm to be installed to ${HOME}/opt/npm/xpm (recommended)
+mkdir -p "${HOME}"/opt/npm
+npm config set prefix "${HOME}"/opt/npm
+echo 'export PATH="${HOME}"/opt/npm/bin:${PATH}' >> "${HOME}"/.profile
+source "${HOME}"/.profile
+# install
+npm install --global xpm
+
+
+# OpenOCD xPack install
+
+xpm install --global @xpack-dev-tools/openocd@latest
+# the binary will be around here:
+# ~/opt/xPacks/@gnu-mcu-eclipse/openocd/0.10.0-12.1/.content/bin/
+# and scripts:
+# /home/konstantin/opt/xPacks/@gnu-mcu-eclipse/openocd/0.10.0-12.1/.content/scripts/
+
+
+```
+
+Затем установить плагин ARM GNU for Eclipse через Eclipse Marketplace.
+
+В конфиге stm32f1x.cfg найти ```set _CPUTAPID 0x3ba00477``` и заменить на ```set _CPUTAPID 0x4ba00477``` для поддержки китайского клона CKS32F103C8T6.
+
+##### GDB
+
+Найти бинарник arm-none-eabi-gdb и поставить вместо gdb по умолчанию в конфиге дебаггера.
+```sh
+locate arm-none-eabi-gdb | grep arm-none-eabi-gdb$
+# output:
+# /opt/st/stm32cubeide_1.3.0/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.7-2018-q2-update.linux64_1.0.0.201904181610/tools/bin/arm-none-eabi-gdb
+```
+
 
 ------------------------------------------------------------------
 
@@ -247,7 +395,7 @@ Clock Configuration : установить требуемую тактовую �
 ##### Serial соединение для прослушивания порта в линуксе:
 
 Программа **screen**:
-```
+```sh
 screen /dev/ttyUSB0 115200
 
 # отключиться от сессии (сама сессия не прерывается)
@@ -262,7 +410,7 @@ screen -r
 
 
 Программа **putty**:
-```
+```sh
 putty /dev/ttyUSB0 -serial -sercfg 115200,8,n,1,N &
 ```
 
@@ -442,4 +590,14 @@ void TIM3_IRQHandler(void)
 
   /* USER CODE END TIM3_IRQn 1 */
 }
+```
+
+##### Get system clock frequency
+```c
+// какие еще есть сокращения
+// посмотреть на вкладке Clock в CubeMX
+printf("SYSCLK=%d\n", HAL_RCC_GetSysClockFreq());
+printf("HCLK=%d\n", HAL_RCC_GetHCLKFreq());
+printf("APB1=%d\n", HAL_RCC_GetPCLK1Freq());
+printf("APB2=%d\n", HAL_RCC_GetPCLK2Freq());
 ```
